@@ -1,18 +1,14 @@
 # PHY566-DUKE
-**PHY566: Computational Physics**
+**PHY566: Computational Physics -- Group Assignment #1**
 
-Group Assignment 1
+Team #2:
 
-Team:
+  * Christopher Flower   (cjf21@duke.edu)
 
-Christopher Flower   (cjf21@duke.edu)
+  * Long Li              (ll199@duke.edu)
 
-Long Li              (ll199@duke.edu)
+  * Shen Yan             (sy123@duke.edu)
 
-Shen Yan             (sy123@duke.edu)
+  * Wenzhe Yu            (wy29@duke.edu)
 
-Wenzhe Yu            (wy29@duke.edu)
-
-Duke University
-
-2016
+2016, Duke University
