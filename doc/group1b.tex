@@ -14,6 +14,36 @@
 
 \section{2D Random Walk}
 
+In this problem, we study the properties of a 2-dimensional random walk. We create random walks of different steps: from 3 to 100 steps. 
+In order to study the average of X-coordinate $<x_n>$, of the square of X-coordinate $<(X_n)^2>$, and of the square distance $<(r_n)^2>$ of random walks with different steps $n$, we, for one random walk with a certain step, average over $10^4$ different walks with same steps. \\
+\\
+As we can see from the figure, $<x_n>$ is oscillating around the zero. Indeed, $<x_n>$ should be zero theoretically. $<(X_n)^2>$, however, is increasing with steps, and the linear coefficient is approximately $\frac{1}{2}$. \\
+\\
+Since this is a symmetric random walk, y-direction should possess the same property with x-direction, so we should anticipate $<(r_n)^2>$ to be also linearly increasing with steps, with the coefficient being $1$. And it is indeed the case shown on the figure.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width = 0.8\textwidth]{xaverage.pdf}
+\caption{  $<x_n>$ vs steps n}
+\label{xaverage}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width = 0.8\textwidth]{x2average.pdf}
+\caption{ $<(X_n)^2>$ vs steps n}
+\label{x2average}
+\end{figure}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width = 0.8\textwidth]{r2average.pdf}
+\caption{ $<(r_n)^2>$ vs steps n}
+\label{r2average}
+\end{figure}
+
+
+
 \section{Diffusion Equation}
 \textbf{a)} Consider the 1D Normal Distribution
 
