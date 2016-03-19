@@ -1,0 +1,108 @@
+\documentclass{article}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\geometry{left=1.8cm,right=1.8cm,top=1.5cm,bottom=1.5cm}
+\parindent=0pt
+
+\begin{document}
+\title{\textbf{Computational Physics Group Assignment 1}}
+\author{Christopher Flower, Long Li, Shen Yan, Wenzhe Yu}
+\maketitle
+
+\section{2D Random Walk}
+
+\section{Diffusion Equation}
+\textbf{a)} Consider the 1D Normal Distribution
+
+\begin{equation}
+\rho(x,t) = \frac{1}{\sqrt{2\pi \sigma^2 (t)}} e^{-\frac{x^2}{2\sigma^2(t)}}
+\end{equation}
+
+The spatial expectation value $<x^2(t)>$ can be computed by
+
+\begin{align*}
+<x^2(t)> & = \int_{-\infty}^{\infty} x^2 \rho(x,t) dt \\
+& = \frac{1}{\sqrt{2\pi \sigma^2 (t)}} \int_{-\infty}^{\infty} x^2 e^{-\frac{x^2}{2\sigma^2(t)}} dx \\
+& = \frac{1}{\sqrt{2\pi \sigma^2 (t)}} \frac{1}{2} (\sqrt{2} \sigma(t))^3 \sqrt{\pi} \\
+& = \sigma^2 (t)
+\end{align*}
+
+Here $\int_{-\infty}^{\infty} x^{2k} e^{-\frac{x^2}{a^2}} dx = \frac{(2k+1)!!}{(2k+1)2^k} a^{2k+1} \sqrt{\pi}\ (k=0,1,2,...)$ is used.\\
+\\
+\textbf{b)} The diffusion equation with a constant diffusion coefficient has the following form:
+
+\begin{equation}
+\frac{\partial u (r,t)}{\partial t} = D \nabla^2 u(r,t)
+\end{equation}
+
+In one-dimensional case, equation (2) becomes
+
+\begin{equation}
+\frac{\partial u (r,t)}{\partial t} = D \frac{\partial^2 u(x,t)}{\partial x^2}
+\end{equation}
+
+The first derivative in time and second derivative in space can be approximated by the finite difference:
+
+\begin{align*}
+\frac{\partial u (r,t)}{\partial t} & = \frac{u(x,t+\Delta t) - u(x,t)}{\Delta t} \\
+\frac{\partial^2 u(x,t)}{\partial x^2} & = \frac{u(x+\Delta x,t)+u(x-\Delta x,t)-2u(x,t)}{(\Delta x)^2}
+\end{align*}
+
+Then equation (3) can be rewritten as
+
+\begin{equation*}
+\frac{u(x,t+\Delta t) - u(x,t)}{\Delta t} = D \cdot \frac{u(x+\Delta x,t)+u(x-\Delta x,t)-2u(x,t)}{(\Delta x)^2}
+\end{equation*}
+
+or equivalently,
+
+\begin{equation}
+u(x,t+\Delta t) = u(x,t) + D \cdot \Delta t \cdot \frac{u(x+\Delta x,t)+u(x-\Delta x,t)-2u(x,t)}{(\Delta x)^2}
+\end{equation}
+
+Starting from an initial box density profile, the 1D diffusion equation (3) is numerically solved based on equation (4). The density profile at later times is plotted in figure~\ref{diffusion}. The density are normally distributed, with different standard deviation $\sigma$. The value of $\sigma$ at time t can be extracted from the maximum value of density $u_{max}$ at $x=0$.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.5\textwidth]{2b_1.pdf}
+\caption{Solution of 1D diffusion equation at time 0, 0.2, 0.4, 0.6, 0.8, 1.0.}
+\label{diffusion}
+\end{figure}
+
+\begin{align*}
+u_{max} (t) & = \rho(0,t) = \frac{1}{\sqrt{2\pi \sigma^2 (t)}} \\
+\Rightarrow \sigma(t) & = \frac{1}{\sqrt{2\pi u_{max}^2 (t)}}
+\end{align*}
+
+The maximum values $u_{max}$ and derived $sigma$ at time 0.2, 0.4, 0.6, 0.8, 1.0 are listed in table~\ref{umax}. The $\sigma (t)$ versus time t is plotted (log scale) in figure~\ref{sigma} with a linear fit line, which has a scope of 0.478. This indicates that $\sigma(t) \propto \sqrt{t}$.
+
+\begin{table}[!ht]
+\begin{center}
+\caption{$u_{max}$ at time 0.2, 0.4, 0.6, 0.8, 1.0.}
+\begin{tabular}{ l | c | c | c | c | c }
+\hline
+t & 0.2 & 0.4 & 0.6 & 0.8 & 1.0 \\ \hline
+$u_{max}$ & 22.1449 & 16.0971 & 13.2666 & 11.5433 & 10.3539 \\ \hline
+$\sigma$ [$\times 10^{-2}$] & 1.8015 & 2.4783 & 3.0071 & 3.4560 & 3.8531 \\ \hline
+\end{tabular}
+\end{center}
+\label{umax}
+\end{table}
+
+\begin{figure}
+\centering
+%\begin{subfigure}[b]{0.45\textwidth}
+%\includegraphics[width=\textwidth]{b11.png}
+%\caption{10 subdivisions}
+%\end{subfigure}
+\includegraphics[width=0.5\textwidth]{2b_2.pdf}
+\caption{$\sigma$ versus t (log plot).}
+\label{sigma}
+\end{figure}
+
+\section{Mixing of two Gases}
+
+\end{document}
