@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+
 """
 Created on Tue Mar 15 15:47:54 2016
 
@@ -65,6 +65,6 @@ legend(loc='upper left')
 xlabel('time step')
 grid()
 ylabel('r2 average')
-#savefig('r2_average.pdf')
+#savefig('r2average.pdf')
 show()  
         

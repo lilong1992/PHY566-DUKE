@@ -46,7 +46,7 @@ plt.grid()
 plt.xticks((40,50,60),(' ','0',' '),fontsize=14)
 plt.yticks((0,12.5,25),('0','H/4','H/2'),fontsize=14)
 #plt.title('1D diffusion equation',fontsize=22, fontweight='bold')
-plt.savefig('2b_1.pdf')
+#plt.savefig('2b_1.pdf')
 plt.show()
 
 ## Gaussian fit to find the variance
@@ -63,12 +63,13 @@ for i in range(5):
     k = i+1
     y = u[:,k*nt/5]
     coeff, var_matrix = curve_fit(gauss,x,y) #fitting, returning an array:coeff[0] = A, coeff[1] =sigma
-    sig[i] = coeff[1]
+    sig[i] = abs(coeff[1]) #I don't know why when k=1 coeff[1] is negative on my computer
+    print coeff
 
 #plot sigma versus time
 plt.figure()
-plt.plot(time,sig,'-k',label='fitted $\sigma$(t)')
-plt.plot(time,sig0,'-r',label='$\sigma$(t) from diffusion constant')
+plt.plot(time,sig,'k*',label='fitted $\sigma$(t)')
+plt.plot(time,sig0,'rd',label='$\sigma$(t) from diffusion constant') #plot five points
 plt.legend(fontsize=12,loc='upper left')
 plt.xlabel('time',fontsize=20)
 plt.ylabel('sigma',fontsize=20)
