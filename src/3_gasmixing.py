@@ -40,7 +40,7 @@ plt.show()
 
 
 
-step_total = 1e5    #random walk step
+step_total = 1e3    #random walk step
 time = 0
 
 #random walk
