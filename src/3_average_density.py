@@ -21,8 +21,8 @@ for i in range(n):  # average the densities over n trials
     j = 0
     for line in file:
         columns = line.split()
-        rho_a[j] += float(columns[1])/100
-        rho_b[j] += float(columns[2])/100
+        rho_a[j] += float(columns[1])/n
+        rho_b[j] += float(columns[2])/n
         j += 1
     file.close
 
