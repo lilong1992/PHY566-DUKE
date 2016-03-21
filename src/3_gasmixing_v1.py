@@ -1,11 +1,6 @@
-# -*- coding: utf-8 -*-
 """
-Created on Sun Mar 20 00:08:58 2016
-
-@author: lilon
-
 modified from v2 by Long Li
-cheat a little, still very slow
+seems like it's slower 
 hope you can find some ideas from my code
 """
 import numpy as np
@@ -28,22 +23,6 @@ def add_new_avaliablesite(i,j):#the hole is at i,j
         if u[i-1,j] and available.count([i-1,j])==0:
             available.append([i-1,j])
 
-def checkandget_random_direction(i,j):
-    global u
-    direc=[]
-    if j-1>=0 and u[i,j-1]==0: #left
-        direc.append(0)
-    if j+1<W and u[i,j+1]==0: #right
-        direc.append(1)
-    if i-1>=0 and u[i-1,j]==0: #down
-        direc.append(2)
-    if i+1<H and u[i+1,j]==0: #up
-        direc.append(3)
-    if len(direc)==0:
-        return -1
-    else:
-        return direc[rd.randint(0,len(direc)-1)]
-
 
 def move(): #pick one particle and move one step
     global u,available
@@ -51,19 +30,29 @@ def move(): #pick one particle and move one step
     pick = rd.randint(0,len(available)-1)
     i = available[pick][0]
     j = available[pick][1]
-    dice=checkandget_random_direction(i,j)
-    if dice==-1:
-        return "unable to move"
-    else:
-        if dice==0:
+    moved=False
+    dice=rd.random() #direction
+    if dice < 0.25: #left
+        if j-1>=0 and u[i,j-1]==0:#check if it's allowed to be moved in
             u[i,j-1]=u[i,j]
-        elif dice==1:
+            u[i,j]=0
+            moved=True
+    elif dice<0.5: #right
+        if j+1<W and u[i,j+1]==0:
             u[i,j+1]=u[i,j]
-        elif dice==2:
+            u[i,j]=0
+            moved=True
+    elif dice<0.75: #down
+        if i-1>=0 and u[i-1,j]==0:
             u[i-1,j]=u[i,j]
-        else:
+            u[i,j]=0
+            moved=True
+    else: #up
+        if i+1<H and u[i+1,j]==0:
             u[i+1,j]=u[i,j]
-        u[i,j]=0
+            u[i,j]=0
+            moved=True
+    if moved:
         available.remove([i,j]) #i,j is no longer a particle
         add_new_avaliablesite(i,j) #add new particles that can move
 
@@ -75,6 +64,8 @@ u = np.zeros((H,W))
 for i in range(H):
     for j in range(W/3):
         u[i,j] = -1
+    for j in range(W/3,2*W/3):
+        u[i,j] = 0
     for j in range(2*W/3,W):
         u[i,j] = 1
 
@@ -87,10 +78,10 @@ for i in range(H):
 
 
 # mixing gases
-for m in range(40001):
-    for n in range(1000):
+for m in range(10001):
+    for n in range(10000):
         move()
-    if m%400==0:
+    if m%50==0:
         plt.figure()
         plt.imshow(u, cmap=cm.Spectral)  # which color map looks better??
         plt.xlabel('x',fontsize=20,fontweight='bold')
@@ -98,6 +89,5 @@ for m in range(40001):
         plt.xticks((0,200,400,600),('0','200','400','600'),fontsize=14)
         plt.yticks((0,200,400),('0','200','400'),fontsize=14)
         plt.title('Mixing two gases',fontsize=22,fontweight='bold')
-        plt.savefig('Tgas_mixing_step#'+str(m)+'e3.png')
-
+        plt.savefig('gas_mixing_step#'+str(m)+'e4.png')
 
