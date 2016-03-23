@@ -69,15 +69,15 @@ for i in range(5):
 #plot sigma versus time
 plt.figure()
 plt.plot(time,sig,'k*',label='fitted $\sigma$(t)')
-plt.plot(time,sig0,'rd',label='$\sigma$(t) from diffusion constant')  #plot five points
+plt.plot(time,sig0,'rd',label='$\sigma(t) = \sqrt{2Dt}$')  #plot five points
 plt.legend(fontsize=12,loc='upper left')
 plt.xlabel('time',fontsize=20)
-plt.ylabel('sigma',fontsize=20)
+plt.ylabel('$\sigma$',fontsize=20)
 plt.xlim(0.1,1.1) 
 #plt.ylim(0.0,2.5)
 plt.grid()
 #plt.title('1D diffusion equation_fit',fontsize=22, fontweight='bold')
-#plt.savefig('group_2b_fit.pdf')
+#plt.savefig('gaussian_fit.pdf')
 plt.show()
 #the final result is that the fitted sigma is always a bit larger than the calculated one, but they
 #have the same trend...
