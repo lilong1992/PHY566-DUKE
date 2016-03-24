@@ -15,11 +15,11 @@ import matplotlib.cm as cm
 
 
 def move_random(steps): #pick one particle and move steps steps
-    global u,available
+    global u,available                     #keep track of all particles, only choose from particles
     # pick one site from the available list
-    pick = rd.randint(0,160000-1)
-    i = available[pick][0]
-    j = available[pick][1]
+    pick = rd.randint(0,160000-1) 
+    i = available[pick][0]   # x coordinate of the randomly chosen particle
+    j = available[pick][1]   # y coordiante of the randomly chosen particle
     dice=rd.random()
     if dice<0.25:
         if j-steps>=0 and u[i,j-steps]==0: #left

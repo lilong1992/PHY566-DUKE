@@ -18,9 +18,9 @@ In this work, the 2D random walk, diffusion equation, and mixing of two gases ar
 \section{2D Random Walk}
 A 2-dimensional random walker is a point continuously taking steps of unit length in $\pm x$ or $\pm y$ direction on a discrete square lattice. Random walkers taking up to 100 steps are simulated, then the properties of 2D random walk are investigated by averaging over $10^4$ walks.\\
 \\
-The average of x-coordinate $<x_n>$, of the square of x-coordinate $<(X_n)^2>$, and of the square distance $<(r_n)^2>$ of random walks with different steps are plotted in figure~\ref{random} (a), (b), and (c), respectively. $<x_n>$ oscillates around zero, consistent with the theoretical expectation. $<(x_n)^2>$, by contrast, increases with steps with a slope of $\frac{1}{2}$.\\
+The average of x-coordinate $<x_n>$, of the square of x-coordinate $<(X_n)^2>$, and of the square distance $<(r_n)^2>$ of random walks with different steps are plotted in figure~\ref{random} (a), (b), and (c), respectively. $<x_n>$ oscillates around zero, consistent with the theoretical expectation. $<(x_n)^2>$, by contrast, increases with steps with a slope of $1/2$.\\
 \\
-Figure~\ref{random} (c) shows that $<(r_n)^2>$ increases with steps as well, with a slope of $1$. This can be explained by the symmetry between  $<(y_n)^2>$ and $<(x_n)^2>$, leading the slope of $<(r_n)^2>$ be $\frac{1}{2}+\frac{1}{2} = 1$.
+Figure~\ref{random} (c) shows that $<(r_n)^2>$ increases with steps as well, with a slope of $1$. This can be explained by the symmetry between  $<(y_n)^2>$ and $<(x_n)^2>$, leading the slope of $<(r_n)^2>$ be $1/2+1/2 = 1$.\\
 
 \begin{figure}[h!]
 \centering
@@ -41,7 +41,7 @@ Figure~\ref{random} (c) shows that $<(r_n)^2>$ increases with steps as well, wit
 \end{figure}
 
 \section{Diffusion Equation}
-\textbf{a)} Consider the 1D Normal Distribution
+Consider the 1D Normal Distribution\\
 
 \begin{equation}
 \rho(x,t) = \frac{1}{\sqrt{2\pi \sigma^2 (t)}} e^{-\frac{x^2}{2\sigma^2(t)}}
@@ -58,52 +58,68 @@ The spatial expectation value $<x^2(t)>$ can be computed by
 
 Here $\int_{-\infty}^{\infty} x^{2k} e^{-\frac{x^2}{a^2}} dx = \frac{(2k+1)!!}{(2k+1)2^k} a^{2k+1} \sqrt{\pi}\ (k=0,1,2,...)$ is used.\\
 \\
-\textbf{b)} The diffusion equation with a constant diffusion coefficient has the following form:
+The diffusion equation with a constant diffusion coefficient has the following form:
 
 \begin{equation}
 \frac{\partial u (r,t)}{\partial t} = D \nabla^2 u(r,t)
 \end{equation}
 
-In one-dimensional case, equation (2) becomes
+In one-dimensional case, equation (2) becomes\\
 
 \begin{equation}
 \frac{\partial u (r,t)}{\partial t} = D \frac{\partial^2 u(x,t)}{\partial x^2}
 \end{equation}
 
-The first derivative in time and second derivative in space can be approximated by the finite difference:
+The first derivative in time and second derivative in space can be approximated by the finite difference:\\
 
 \begin{align*}
 \frac{\partial u (r,t)}{\partial t} & = \frac{u(x,t+\Delta t) - u(x,t)}{\Delta t} \\
 \frac{\partial^2 u(x,t)}{\partial x^2} & = \frac{u(x+\Delta x,t)+u(x-\Delta x,t)-2u(x,t)}{(\Delta x)^2}
 \end{align*}
 
-Then equation (3) can be rewritten as
+Then equation (3) can be rewritten as\\
 
 \begin{equation*}
 \frac{u(x,t+\Delta t) - u(x,t)}{\Delta t} = D \cdot \frac{u(x+\Delta x,t)+u(x-\Delta x,t)-2u(x,t)}{(\Delta x)^2}
 \end{equation*}
 
-or equivalently,
+or equivalently,\\
 
 \begin{equation}
 u(x,t+\Delta t) = u(x,t) + D \cdot \Delta t \cdot \frac{u(x+\Delta x,t)+u(x-\Delta x,t)-2u(x,t)}{(\Delta x)^2}
 \end{equation}
 
-Starting from an initial box density profile, the 1D diffusion equation (3) is numerically solved based on equation (4). The density profile at later times is plotted in figure~\ref{diffusion}. The density are normally distributed, with different standard deviation $\sigma$. The value of $\sigma$ at time t can be extracted from the maximum value of density $u_{max}$ at $x=0$.
+Starting from an initial box density profile, the 1D diffusion equation (3) is numerically solved based on equation (4). The density profile at later times is plotted in figure~\ref{diffusion}. The density are normally distributed, with different standard deviation $\sigma$. The value of $\sigma$ at time t is obtained through Gaussian fitting. Figure~\ref{sigma} (a) shows the comparison between the fitted $\sigma$ and the theoretical values calculated by $\sigma(t) = \sqrt{2Dt}$. The fitted values of $\sigma$ agrees well with the theoretical values.
 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.5\textwidth]{diffusion.pdf}
+\includegraphics[width=0.45\textwidth]{diffusion.pdf}
 \caption{Solution of 1D diffusion equation at time 0, 0.2, 0.4, 0.6, 0.8, 1.0.}
 \label{diffusion}
 \end{figure}
+
+\begin{figure}[h!]
+\centering
+\begin{subfigure}[b]{0.36\textwidth}
+\includegraphics[width=\textwidth]{gaussianfit.pdf}
+\caption{Gaussian fitted $\sigma$}
+\end{subfigure}
+\begin{subfigure}[b]{0.36\textwidth}
+\includegraphics[width=\textwidth]{sigma.pdf}
+\caption{$\sigma$ versus t (log plot)}
+\end{subfigure}
+\caption{Comparison between calculated $\sigma$ and $\sigma(t) = \sqrt{2Dt}$.}
+\label{sigma}
+\end{figure}
+
+$\sigma(t) = \sqrt{2Dt}$ is verified by $\sigma$ directly extracted from the maximum value of density $u_{max}$ at $x=0$.\\
 
 \begin{align*}
 u_{max} (t) & = \rho(0,t) = \frac{1}{\sqrt{2\pi \sigma^2 (t)}} \\
 \Rightarrow \sigma(t) & = \frac{1}{\sqrt{2\pi u_{max}^2 (t)}}
 \end{align*}
 
-The maximum values $u_{max}$ and derived $sigma$ at time 0.2, 0.4, 0.6, 0.8, 1.0 are listed in table~\ref{umax}. The $\sigma (t)$ versus time t is plotted (log scale) in figure~\ref{sigma} with a linear fit line, which has a scope of 0.478. This indicates that $\sigma(t) \propto \sqrt{t}$.
+The maximum values $u_{max}$ and derived $sigma$ at time 0.2, 0.4, 0.6, 0.8, 1.0 are listed in table 1. The $\sigma (t)$ versus time t is plotted (log scale) in figure~\ref{sigma} (b) with a linear fit line, which has a scope of 0.478. This indicates that $\sigma(t) \propto \sqrt{t}$.\\
 
 \begin{table}[!ht]
 \begin{center}
@@ -118,43 +134,51 @@ $\sigma$ [$\times 10^{-2}$] & 1.8015 & 2.4783 & 3.0071 & 3.4560 & 3.8531 \\ \hli
 \label{umax}
 \end{table}
 
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.5\textwidth]{sigma.pdf}
-\caption{$\sigma$ versus t (log plot).}
-\label{sigma}
-\end{figure}
-
 \section{Mixing of two Gases}
+The mixing of two gases can be simulated with a number of random walkers. For simplicity, a 2D rectangular enclosure with dimensions $400 \times 600$ is studied. The initial profile is set up by fully populating the left third of the box with gas A and the right third with gas B.\\
+\\
+Four versions of code with increasing mixing speed, v0, v1, v2, and v3, are discussed here.\\
+\\
+\textbf{v0:}  A grid point is selected randomly from the $400 \times 600$ region, to perform a one-step random move. The move will be accepted if the destination is not occupied by another particle and is inside the box; it will be rejected if the destination is occupied or is outside the box. This process is iterated for sufficient times until a stable configuration is achieved.\\
+\\
+According to our observation, this method works, but is extremely slow at the beginning of the gases mixing. Initially, only those particles that lie on the boundary of gas A and vacuum, and the boundary of gas B and vacuum, are free to move. The ratio of movable particles to all particles is $800/240000 = 1/300$. Each free particle only has one direction to move, i.e. only moving towards the vacuum is allowed, which has a probability of $1/4$. Therefore, at the beginning stage, the probability of a successful move is $1/300 \times 1/4 = 1/1200$. This low probability explains the low speed of gases mixing.\\
+\\
+\textbf{v1:}  An easy improvement of v0 is creating a list of available sites, and randomly pick a site only from the list. After each successful move, the list of available sites is updated: [i\_old, j\_old] moves to [i\_new, j\_new] successfully, then add [i\_new, j\_new] to the list, and remove [i\_old, j\_old] from the list. Theoretically, $1/3$ iterations should be saved compared to v0, although it takes long time to fully mix the two gases as well.\\
+\\
+\textbf{v2:}  In a more aggressive strategy, the initial list of available sites only contains those 800 particles on the boundary. Then the list is gradually enlarged due to the largest distance of the movement of particles, until the list include all grid points. Another trick used in v2 is that after a grid point is selected, it always moves one step to a randomly chosen direction, unless no direction is free to move.\\
+\\
+\textbf{v3:}  Further acceleration of the mixing process is achieved by increasing the step-size per move. For instance, if a particle is allowed to move 100 steps, instead of only 1 step, the two gases can be mixed in a few minutes. However, this method no longer makes physical sense. Thus v3 is not used for the analysis of gases configurations and linear population densities.\\
+\\
+The configurations after different number of random moves are plotted in figure~\ref{configurations}. In figure~\ref{configurations} (f), A and B gases are fully mixed. The status of mixing is more visible by the linear population densities, as shown in figure~\ref{densities}. A and B gases are separated at the beginning (figure~\ref{densities} (a)). Finally the distribution of each gas is virtually uniform along the x direction (figure~\ref{densities} (f)).\\
 
 \begin{figure}[h!]
 \centering
 \begin{subfigure}[b]{0.32\textwidth}
-%\includegraphics[width=\textwidth]{snapshot_0.pdf}
+\includegraphics[width=\textwidth]{snapshot_0.pdf}
 %\caption{$n = 0$}
 \end{subfigure}
 \begin{subfigure}[b]{0.32\textwidth}
-%\includegraphics[width=\textwidth]{snapshot_1.pdf}
+\includegraphics[width=\textwidth]{snapshot_1.pdf}
 %\caption{$n = $}
 \end{subfigure}
 \begin{subfigure}[b]{0.32\textwidth}
-%\includegraphics[width=\textwidth]{snapshot_2.pdf}
+\includegraphics[width=\textwidth]{snapshot_2.pdf}
 %\caption{$n = $}
 \end{subfigure}
 \begin{subfigure}[b]{0.32\textwidth}
-%\includegraphics[width=\textwidth]{snapshot_3.pdf}
+\includegraphics[width=\textwidth]{snapshot_3.pdf}
 %\caption{$n = $}
 \end{subfigure}
 \begin{subfigure}[b]{0.32\textwidth}
-%\includegraphics[width=\textwidth]{snapshot_4.pdf}
+\includegraphics[width=\textwidth]{snapshot_4.pdf}
 %\caption{$n = $}
 \end{subfigure}
 \begin{subfigure}[b]{0.32\textwidth}
-%\includegraphics[width=\textwidth]{snapshot_5.pdf}
+\includegraphics[width=\textwidth]{snapshot_5.pdf}
 %\caption{$n = $}
 \end{subfigure}
-\label{densities}
 \caption{Gases mixing configurations after different number of steps.}
+\label{configurations}
 \end{figure}
 
 \begin{figure}[h!]
@@ -183,18 +207,27 @@ $\sigma$ [$\times 10^{-2}$] & 1.8015 & 2.4783 & 3.0071 & 3.4560 & 3.8531 \\ \hli
 \includegraphics[width=\textwidth]{densities_5.pdf}
 %\caption{$n = $}
 \end{subfigure}
-\label{densities}
 \caption{Linear population densities after different number of steps.}
+\label{densities}
 \end{figure}
+
+In principle, two fully mixed gases should be uniformly distributed within the box. Due to the stochastic nature of the mixing simulation, the uniform distribution is never obtained by one single trial. The linear population densities averaged over 100 trials, illustrated in figure~\ref{average100}, show good agreement with the uniform distribution. The densities will gradually approach the perfect uniform distribution with increasing number of trials.
 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=0.5\textwidth]{densities_average.pdf}
+\includegraphics[width=0.45\textwidth]{densities_average.pdf}
 \caption{Linear population densities averaged over 100 trials.}
 \label{average100}
 \end{figure}
 
 \section{Conclusions}
+In this work, the 2D random walk, diffusion equation, and mixing of two gases are studied by Python programs. $<x_n>$ of 2D random walk oscillates around zero, while $<(x_n)^2>$ and $<(r_n)^2>$ increases linearly with steps.\\
+\\
+The solutions of 1D diffusion equation with an initial box density profile are normal distributions. The standard variance $\sigma$ of the normal distribution is proportional to the square root of time $\sqrt{t}$.\\
+\\
+In the gases mixing simulation, two gases are fully mixed after a large number of iteration steps. The final linear population density of each gas averaged over 100 simulations is a uniform distribution.\\
+\\
+The source code of this work is downloadable online at github.com/vyu16/PHY566-DUKE.
 
 \begin{thebibliography}{9}
 \bibitem{notes}
