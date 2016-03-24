@@ -7,11 +7,11 @@ def move(u,available,num,ar,al,br,bl):
 
     # pick one site from the available list
     pick = int(rd.uniform(0,num-1))
-    i = available[pick][0]
+    i = available[pick][0]  # get the coordinates
     j = available[pick][1]
     
     # check possible direction
-    left,right,down,up = 0,0,0,0
+    left,right,down,up = 0,0,0,0    # the direction = 1 is allowed
     if j-1 >= 0 and u[i,j-1] == 0:  # left is not out of bound, not occupied
         left = 1
     if j+1 <= W and u[i,j+1] == 0:  # right
@@ -29,31 +29,31 @@ def move(u,available,num,ar,al,br,bl):
         if dice < 0.25:  # left
             u[i,j-1] = u[i,j]
             u[i,j] = 0
-            if u[i,j-1] == 1:
+            if u[i,j-1] == 1:  # gas B
                 if ar < j-1 < bl:
                     for ii in range(H+1):
                         available.append([ii,j-1])  # update the list of available sites
                         num += 1
-                    bl = j-1
+                    bl = j-1  # update bl
                 if W > j > br:
                     for ii in range(H+1):
-                        available.append([ii,j+1])
+                        available.append([ii,j+1])  # update the list of available sites
                         num += 1
-                    br = j
+                    br = j  # update br
         elif dice < 0.50:  # right
             u[i,j+1] = u[i,j]
             u[i,j] = 0
-            if u[i,j+1] == -1:
+            if u[i,j+1] == -1: # gas A
                 if bl > j+1 > ar:
                     for ii in range(H+1):
-                        available.append([ii,j+1])
+                        available.append([ii,j+1])  # update the list of available sites
                         num += 1
-                    ar = j+1
+                    ar = j+1  # update ar
                 if 0 < j < al:
                     for ii in range(H+1):
-                        available.append([ii,j-1])
+                        available.append([ii,j-1])  # update the list of available sites
                         num += 1
-                    al = j
+                    al = j  # update al
         elif dice < 0.75:  # down
             u[i-1,j] = u[i,j]
             u[i,j] = 0
@@ -118,9 +118,9 @@ W = 600  # width of area, should be a multiple of 3
 u = np.zeros((H+1,W+1))
 for i in range(H+1):
     for j in range(W/3+1):
-        u[i,j] = -1
+        u[i,j] = -1  # gas A
     for j in range(2*W/3+1,W+1):
-        u[i,j] = 1
+        u[i,j] = 1  # gas B
 
 # initialize available sites
 available = []
@@ -129,10 +129,11 @@ for i in range(H+1):
     available.append([i,W/3])  # available sites at the beginning
     available.append([i,2*W/3+1])
     num +=2
-ar = W/3
-al = W/3+1
-br = 2*W/3
-bl = 2*W/3+1
+# available region is [al,ar] and [bl,br]
+ar = W/3  # right bound of A
+al = W/3+1  # left bound of empty site
+br = 2*W/3  # right bound of empty site
+bl = 2*W/3+1  # left bound of B
 
 # mixing gases
 for m in range(10001):

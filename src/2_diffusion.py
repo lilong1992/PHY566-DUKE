@@ -3,9 +3,9 @@ import pylab as plt
 
 # parameters
 L  = 100.0  # total length to solve
-nx = 2000   # number of length steps
+nx = 1000   # number of length steps
 T  = 1.0    # total time to solve
-nt = 10000  # number of time steps
+nt = 40000  # number of time steps
 D  = 2.0    # diffusion constant
 H  = 50.0   # peak height at t = 0
 
@@ -14,7 +14,7 @@ dt = T/nt
 
 # initialize u
 u = np.zeros((nx+1,nt+1))
-for i in range(int(nx/2-0.5/dx),int(nx/2+0.5/dx+1)):  # initial peak width = 1
+for i in range(int(nx/2-0.5/dx),int(nx/2+0.5/dx+1)):  # initial peak width
     u[i,0] = H
 
 # computational kernel: finite difference
@@ -25,9 +25,6 @@ for j in range(nt):        # time controled by j
 
 # array for plotting
 x = np.linspace(0,L,nx+1)
-
-for i in range(6):
-    print u[nx/2,i*nt/5]
 
 # plot
 plt.figure()
@@ -46,13 +43,13 @@ plt.grid()
 plt.xticks((40,50,60),(' ','0',' '),fontsize=14)
 plt.yticks((0,12.5,25),('0','H/4','H/2'),fontsize=14)
 #plt.title('1D diffusion equation',fontsize=22, fontweight='bold')
-#plt.savefig('2b_1.pdf')
+#plt.savefig('diffusion.pdf')
 plt.show()
 
 # Gaussian fit to find the variance
-from scipy.optimize import curve_fit  # using curve_fit from scipy
+from scipy.optimize import curve_fit
 
-def gauss(x, A, sigma):        # define a fitting function
+def gauss(x,A,sigma):        # define a fitting function
     return A*np.exp(-(x-L/2)**2/(2.0*sigma**2))
 
 time = np.linspace(0.2,1.0,5)  # time at 0.2,0.4,0.6,0.8,1.0
@@ -62,22 +59,21 @@ sig0 = np.sqrt(2.0*D*time)     # calculate sigma(t) = sqrt(2*D*t)
 for i in range(5):             
     k = i+1
     y = u[:,k*nt/5]
-    coeff, var_matrix = curve_fit(gauss,x,y)  #fitting, returning an array:coeff[0] = A, coeff[1] =sigma
-    sig[i] = abs(coeff[1])  #I don't know why when k=1 coeff[1] is negative on my computer
+    coeff, var_matrix = curve_fit(gauss,x,y)  # fitting, return coeff[0] = A, coeff[1] = sigma
+    sig[i] = abs(coeff[1])
     print coeff
 
 #plot sigma versus time
 plt.figure()
 plt.plot(time,sig,'k*',label='fitted $\sigma$(t)')
 plt.plot(time,sig0,'rd',label='$\sigma(t) = \sqrt{2Dt}$')  #plot five points
-plt.legend(fontsize=12,loc='upper left')
-plt.xlabel('time',fontsize=20)
-plt.ylabel('$\sigma$',fontsize=20)
+plt.legend(fontsize=15,loc='upper left')
+plt.xlabel('time',fontsize=18)
+plt.ylabel('$\sigma$',fontsize=18)
 plt.xlim(0.1,1.1) 
 #plt.ylim(0.0,2.5)
 plt.grid()
 #plt.title('1D diffusion equation_fit',fontsize=22, fontweight='bold')
 #plt.savefig('gaussian_fit.pdf')
 plt.show()
-#the final result is that the fitted sigma is always a bit larger than the calculated one, but they
-#have the same trend...
+#the fitted sigma agrees well with the calculated one, although slightly larger
