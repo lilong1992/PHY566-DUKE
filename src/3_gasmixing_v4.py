@@ -1,112 +1,75 @@
-'''
-Created on Mar 24, 2016
+# -*- coding: utf-8 -*-
+"""
+Created on Sun Mar 20 00:08:58 2016
 
-@author: Chris
-'''
+@author: lilon
+can mix the gas in one minute
+2-stage mixing
+1st stage:large step
+2nd stage:one step
+"""
 import numpy as np
 import random as rd
 import pylab as plt
 import matplotlib.cm as cm
 
+
+def move_random(steps): #pick one particle and move steps steps
+    global u,available                     #keep track of all particles, only choose from particles
+    # pick one site from the available list
+    pick = rd.randint(0,160000-1) 
+    i = available[pick][0]   # x coordinate of the randomly chosen particle
+    j = available[pick][1]   # y coordiante of the randomly chosen particle
+    dice=rd.random()
+    if dice<0.25:
+        if j-steps>=0 and u[i,j-steps]==0: #left
+            u[i,j-steps]=u[i,j]
+            u[i,j]=0
+            available[pick]=[i,j-steps] #renew the position
+    elif dice<0.5:
+        if j+steps<W and u[i,j+steps]==0: #right
+            u[i,j+steps]=u[i,j]
+            u[i,j]=0
+            available[pick]=[i,j+steps]
+    elif dice<0.75:
+        if i-steps>=0 and u[i-steps,j]==0: #down
+            u[i-steps,j]=u[i,j]
+            u[i,j]=0
+            available[pick]=[i-steps,j]
+    else:
+        if i+steps<H and u[i+steps,j]==0: #up
+            u[i+steps,j]=u[i,j]
+            u[i,j]=0
+            available[pick]=[i+steps,j]
+        
+
+# initialize u
 H = 400  # height of area
 W = 600  # width of area, should be a multiple of 3
-availDict = {} #define new dictionary
-
-particleSet = set() #define an empty set that will hold the location of all particles...
-mobileSet = set() #define an empty set that will hold locations of all particles that have empty spots near them. 
-
-
-def move(y,x):
-    destination = getAvail(y,x) #the destination tuple is retrieved
-    xnew = destination[1]
-    ynew = destination[0] #grab x and y 
-    particleSet.add((ynew,xnew)) #add the new particles location to this set
-    particleSet.remove((y,x)) #take the particle out of hte last one where it came from - why did this throw a key error???
-    u[ynew, xnew] = u[y,x] #SET THE NEW SPOT EQUAL TO THE OLD SPOT
-    u[y,x] = 0 #set the original spot to empty...
-
-def updateAvails(y,x): #the input is an x,y tuple
-    #this is a method that will update the available sites around a location
-    availDict[(y,x)] = [] #set the corresponding VALUE for KEY tuple (x,y) equal to an EMPTY list of TUPLES
-    isMobile = False
-    if (u[y+1,x] == 0): #if the space is unoccupied... INDEXING OUT OF BOUNDS
-        availDict[(y,x)].append((y+1,x)) #the TUPLE (x+1,y) is APPENDED to the empty list that corresponds to location (x,y)
-        mobileSet.add((y,x))
-        isMobile = True
-    if (u[y-1,x] == 0): #if the space is unoccupied...
-        availDict[(y,x)].append((y-1,x))    
-        mobileSet.add((y,x))
-        isMobile = True
-    if (u[y,x+1] == 0): #if the space is unoccupied...
-        availDict[(y,x)].append((y,x+1))
-        mobileSet.add((y,x))
-        isMobile = True
-    if (u[y,x-1] == 0): #if the space is unoccupied...
-        availDict[(y,x)].append((y,x-1))
-        mobileSet.add((y,x)) #holds no duplicates so it doesnt matter if we add it several times...
-        isMobile = True
-        
-    if (isMobile == False and ((y,x) in mobileSet)): #if it was mobile before and no longer is... take it out of the mobile set!
-        mobileSet.remove((y,x))
-        
-
-def getAvail(y,x):
-    #this function gets an available site for location x,y
-    updateAvails(y,x) 
-    tempList = availDict[(y,x)]
-    length = len(tempList) #number of available sites.. 0 to 4
-    if (length != 0):
-        #if there are available sites
-        index = rd.randint(0,length-1) #think this ought to be -1
-        site = tempList[index] #this should give the element in the available dictionary corresponding to to (x,y) at position index...
-        return site #RETURNS A TUPLE
-    return (y,x) #returns the original site if there are no available sites...
-
-# initialize u, particleSet and mobileSet
-u = np.zeros((H+1,W+1)) #should stop it from out of boundsing...might still need -1!
-print("initializing...")
-for i in range(H-1):
-    for j in range(int(W/3)): #added int call #I got rid of the 1, stuff cuz I think that was not necessary and making the edges diffuse
+u = np.zeros((H,W))
+available = np.zeros((160000,2)) #store positions of all particles
+for i in range(H):
+    for j in range(W/3):
         u[i,j] = -1
-        particleSet.add((i,j)) #is this syntax ok
-    for j in range(2*int(W/3),W): #added int call
+        available[i*W/3+j]=[i,j]
+    for j in range(2*W/3,W):
         u[i,j] = 1
-        particleSet.add((i,j)) #is this syntax ok
-#once the particles are in place...
+        available[i*W/3+j+79600]=[i,j]
 
-#initialize mobileSet
-for i in range(H-1):
-    for j in range(W-1): #this isn't the most efficient but only gets called once so whatever.
-        updateAvails(i,j) #update this particles avails
-        if (getAvail(i,j) != (i,j) and u[i,j] != 0 and j != 1 and j!= 598): #if there is an available spot, AND a particle and it's not sitting on the boundary 
-            mobileSet.add((i,j))
-print("sets initialized")     
-        
-        
+
 # mixing gases
 for m in range(10001):
-    print("m is " + str(m))
-    for n in range(100): #decreased these because my computer probably wont make it...
-        test = rd.sample(particleSet.intersection(mobileSet), 1) #grab a random PARTICLE that is classified as MOBILE and MOVE IT
-        h = test[0][0]
-        w = test[0][1] 
-        move(h,w)
-        for i in range(h-2,h+2):
-            for j in range(w-2, w+2):
-                if(i<398 and i>2 and j<598 and j>2): #should stop this from indexing out of bounds BUT will screw up the edge cases ... to fix later
-                    updateAvails(i,j) #this should update every square within two spaces so that the sites stay accurate
-        
-    if m%100 == 0:  # output every 100 outer steps
-        print('iteration number: ',m,'x 10e6')
+    for n in range(1000):
+        steps=rd.randint(50,150)
+        move_random(steps)
+    if m%500==0:
         plt.figure()
-        plt.imshow(u, cmap=cm.Spectral)
+        plt.imshow(u, cmap=cm.Spectral)  # which color map looks better??
         plt.xlabel('x',fontsize=20,fontweight='bold')
         plt.ylabel('y',fontsize=20,fontweight='bold')
         plt.xticks((0,200,400,600),('0','200','400','600'),fontsize=14)
         plt.yticks((0,200,400),('0','200','400'),fontsize=14)
-        plt.title('Mixing two gases - Dict Method + m =' + str(m),fontsize=22,fontweight='bold')
-        plt.savefig('new trial gases_'+str(m)+'.pdf')  # name each figure with index
-        #plt.show()         
-        
-        
+        plt.title('Mixing two gases',fontsize=22,fontweight='bold')
+        plt.savefig('Xgas_mixing_step#'+str(m)+'e3.png')
+        plt.close()
 
