@@ -13,6 +13,6 @@ Team #2:
 
 This repo contains Python codes for the group assignment of the course Computational Physics, taught by Prof. Steffen A. Bass at Duke University.
 
-Source codes can be found in the src directory. For technical details please refer to documentation.pdf in the doc directory.
+Source codes can be found in the src directory. For technical details please refer to the documentations in the doc directory.
 
 2016, Duke University. All rights reserved.
