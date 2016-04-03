@@ -1,0 +1,86 @@
+\documentclass{article}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\geometry{left=1.6cm,right=1.6cm,top=1.6cm,bottom=1.5cm}
+\parindent=0pt
+
+\begin{document}
+\title{\textbf{Computational Physics Group Assignment 2\\Predator-Prey Model}}
+\author{Christopher Flower, Long Li, Shen Yan, Wenzhe Yu}
+\maketitle
+
+\section{Introduction}
+In this work, the ecosystem of shark and fish is simulated by a predator-prey model using Python code.
+
+\section{Method}
+The predator-prey model is used to simulate the dynamics of biological systems in which two species, e.g. shark and fish, interact. Mathematically, the population of the prey and the predator can be described by non-linear first order differential equations, the Lotka-Volterra equations:
+
+\begin{align*}
+\frac{dx}{dt} & = x(\alpha - \beta y) \\
+\frac{dy}{dt} & = -y(\gamma - \delta x)
+\end{align*}
+
+where x and y are the number of prey and the number of predators. The prey growth term $\alpha x$ leads to an exponential growth of prey population in absence of predators. The predator loss term $- \gamma y$ leads to an exponential decay of predator population in absence of prey. The prey loss term $\beta yx$ and the predator growth term $\delta xy$ depend both on the number of predators and the number of prey.\\
+\\
+The Lotka-Volterra equations have periodic solutions with the maxima of predator population shifted $90^{o}$ compared to prey population. At any given time the system is in a limit cycle and/or will reach a stable periodic solution. Extinction of species occurs when the population becomes too small to recover.\\
+\\
+In the Monte-Carlo implementation of the predator-prey model, the ecosystem of shark and fish is set up with a 2-dimensional array with periodic boundary conditions, i.e. a torus world is considered. The parameters of this system include initial number of shark, initial number of fish, number of time steps for fish and shark to procreate, respectively, and the number of time steps for shark to die of starvation.\\
+\\
+At each time step, shark and fish behave following several rules:\\
+\\
+\textbf{Fish: swim and breed}\\
+\\
+- for each fish make a list of available neighboring positions; pick one at random; move fish there; increment age.\\
+- if fish reaches breeding age, put a new fish at (i,j) and set both fish age 0.\\
+\\
+\textbf{Shark: hunt and breed}\\
+\\
+- for each shark make a list of adjacent fish; pick one at random; move shark there and erase that fish; reset starving time; increment age.\\
+- if no fish around, make a list of available neighboring positions; pick one at random; move shark there; increment age.\\
+- if shark reaches breeding age, put a new shark at (i,j) and reset age to 0 for both.\\
+- if shark reaches starvation age, erase shark.\\
+\\
+The following arrays are used to keep track with the behavior of shark and fish:\\
+\\
+\textbf{Fish}(i,j): represents presence or absence of a fish at (i,j). -1 if no fish; otherwise the age of the fish.\\
+\\
+\textbf{Shark}(i,j): represents presence or absence of a shark at (i,j), similar to \textbf{Fish(i,j)}.\\
+\\
+\textbf{FishMove}(i,j): holds a record whether fish at (i,j) has been moved in the current time step.\\
+\\
+\textbf{SharkMove}(i,j): holds a record whether shark at (i,j) has been moved in the current time step.\\
+\\
+\textbf{SharkStarve}(i,j): stores the time since shark at (i,j) last ate.\\
+\\
+
+\section{Results and Discussions}
+
+%\begin{figure}[h!]
+%\centering
+%\begin{subfigure}[b]{0.32\textwidth}
+%\includegraphics[width=\textwidth]{a.pdf}
+%\caption{sub1}
+%\end{subfigure}
+%\begin{subfigure}[b]{0.32\textwidth}
+%\includegraphics[width=\textwidth]{b.pdf}
+%\caption{sub2}
+%\end{subfigure}
+%\caption{fig1}
+%\label{fig1}
+%\end{figure}
+
+\section{Conclusions}
+
+The source code of this work is downloadable online at github.com/vyu16/PHY566-DUKE.
+
+\begin{thebibliography}{9}
+\bibitem{notes}
+Notes of \textbf{\textit{Computational Physics}} by Prof. S.A. Bass.
+\bibitem{dewdney}
+A.K. Dewdney, Sharks and fish wage an ecological war on the toroidal planet Wa-Tor, 1984.
+\end{thebibliography}
+
+\end{document}
