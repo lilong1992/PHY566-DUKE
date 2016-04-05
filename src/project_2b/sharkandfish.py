@@ -6,6 +6,7 @@ Created on Sun Apr 03 21:14:59 2016
 
 from pylab import *
 import random as rd
+from matplotlib import animation
 L=160
 W=50 #length and width of the ocean
 nfish=3000 #number of initial fish
@@ -48,7 +49,7 @@ def move():
                 else:
                     fish[i,j]+=1
                     if fish[i,j]>fbreed:
-                        fish[inew,jnew]=1
+                        fish[inew,jnew]=1 #reset the age
                         fish[i,j]=1
                         nfish+=1
                     else:
@@ -87,7 +88,7 @@ def move():
                     fish[inew,jnew]=0 #eat it!
                     nfish-=1
                     shark[i,j]+=1
-                    starve[inew,jnew]=1
+                    starve[inew,jnew]=1 #reset starve
                     if shark[i,j]>sbreed:#check if it can breed
                         shark[inew,jnew]=1
                         shark[i,j]=1
@@ -126,7 +127,7 @@ def checkandgetrandomdirection_stof(i,j):
         direc.append([i,(j-1)%W])
     if fish[i,(j+1)%W]>0: #up
         direc.append([i,(j+1)%W])
-        """
+        """#more powerful sharks
     if fish[(i-1)%L,(j-1)%W]>0:#down left
         direc.append([(i-1)%L,(j-1)%W])
     if fish[(i-1)%L,(j+1)%W]>0:
@@ -158,15 +159,17 @@ def checkandgetrandomdirection_shark(i,j):
     else:
         newposition=direc[rd.randint(0,len(direc)-1)]
         return newposition[0],newposition[1]
-                    
+"""
 #start simulation
 T=1000
-time = np.linspace(0,T-1,T)
-population = np.zeros((T,2))
+time = np.linspace(0,T,T+1)
+population = np.zeros((T+1,2))
 for t in range(T):
     population[t,0]=nfish
     population[t,1]=nsharks
     move()
+population[T,0]=nfish
+population[T,1]=nsharks
 
 figure() 
 plot(time,population[:,0],'r',label='fish',linewidth=2)
@@ -176,9 +179,40 @@ xlabel('t',fontsize=15,fontweight='bold')
 ylabel('population',fontsize=15,fontweight='bold')
 grid()
 show()                    
-                    
-                    
-                    
+"""
+#animation, more comments will be added later
+T=1000
+#doesn't work on my MAC, works on my PC
+fig=figure()
+ax=axes(xlim=(-1,L),ylim=(-1,W))
+linefish, =ax.plot([],[],'r*')
+lineshark, =ax.plot([],[],'bo')
+
+def init():
+    linefish.set_data([],[])
+    lineshark.set_data([],[])
+    return linefish,lineshark,
+
+def animate(i):
+    global fish,shark
+    x1,y1,x2,y2=[],[],[],[]
+    for i in range(L):
+        for j in range(W):
+            if fish[i,j]>0:
+                x1.append(i)
+                y1.append(j)
+            if shark[i,j]>0:
+                x2.append(i)
+                y2.append(j)
+    linefish.set_data(x1,y1)
+    lineshark.set_data(x2,y2)
+    move()
+    return linefish,lineshark,
+
+anim = animation.FuncAnimation(fig, animate,init_func=init, frames=T,interval=100, blit=True)
+#need to install ffmmpeg to save animation
+#anim.save('fishandsharks_animation.mp4', fps=10,extra_args=['-vcodec', 'libx264'])
+show()
                     
                     
                     
