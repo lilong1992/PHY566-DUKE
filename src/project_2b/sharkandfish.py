@@ -7,8 +7,9 @@ Created on Sun Apr 03 21:14:59 2016
 from pylab import *
 import random as rd
 from matplotlib import animation
-L=160
-W=50 #length and width of the ocean
+
+L=100
+W=80 #length and width of the ocean
 nfish=3000 #number of initial fish
 nsharks=300
 fbreed=4 #fish breeding age
@@ -36,6 +37,7 @@ while tmp<nsharks:
         starve[i,j]=1
         tmp+=1
 #finish initialization
+
 def move():
     global fish,shark,starve,nsharks,nfish
     #fish moves first
@@ -127,7 +129,8 @@ def checkandgetrandomdirection_stof(i,j):
         direc.append([i,(j-1)%W])
     if fish[i,(j+1)%W]>0: #up
         direc.append([i,(j+1)%W])
-        """#more powerful sharks
+    # more powerful sharks
+    """
     if fish[(i-1)%L,(j-1)%W]>0:#down left
         direc.append([(i-1)%L,(j-1)%W])
     if fish[(i-1)%L,(j+1)%W]>0:
@@ -136,7 +139,7 @@ def checkandgetrandomdirection_stof(i,j):
         direc.append([(i+1)%L,(j-1)%W])
     if fish[(i+1)%L,(j+1)%W]>0:
         direc.append([(i+1)%L,(j+1)%W])
-        """
+    """
     if direc==[]:
         return -1,-1
     else:
@@ -159,7 +162,21 @@ def checkandgetrandomdirection_shark(i,j):
     else:
         newposition=direc[rd.randint(0,len(direc)-1)]
         return newposition[0],newposition[1]
-"""
+
+def showocean(t):  # VY: plot ocean in case that animation doesn't work
+    ocean = zeros((L,W))
+    for i in range(L):
+        for j in range(W):
+            if fish[i,j] > 0:
+                ocean[i,j] = 1
+            if shark[i,j] > 0:
+                ocean[i,j] = -1
+    figure()
+    imshow(ocean,cmap=cm.seismic)
+    xticks(())
+    yticks(())
+    #savefig('ocean_'+str(t)+'.pdf')
+
 #start simulation
 T=1000
 time = np.linspace(0,T,T+1)
@@ -167,10 +184,12 @@ population = np.zeros((T+1,2))
 for t in range(T):
     population[t,0]=nfish
     population[t,1]=nsharks
+#    showocean(t)
     move()
 population[T,0]=nfish
 population[T,1]=nsharks
 
+# plot population
 figure() 
 plot(time,population[:,0],'r',label='fish',linewidth=2)
 plot(time,population[:,1],'b',label='shark',linewidth=2)
@@ -178,11 +197,13 @@ legend(fontsize=15,loc='upper right')
 xlabel('t',fontsize=15,fontweight='bold')
 ylabel('population',fontsize=15,fontweight='bold')
 grid()
-show()                    
+#savefig('population.pdf')
+show()
+
 """
-#animation, more comments will be added later
+# animation
 T=1000
-#doesn't work on my MAC, works on my PC
+
 fig=figure()
 ax=axes(xlim=(-1,L),ylim=(-1,W))
 linefish, =ax.plot([],[],'r*')
@@ -213,33 +234,4 @@ anim = animation.FuncAnimation(fig, animate,init_func=init, frames=T,interval=10
 #need to install ffmmpeg to save animation
 #anim.save('fishandsharks_animation.mp4', fps=10,extra_args=['-vcodec', 'libx264'])
 show()
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                    
-                
+"""
