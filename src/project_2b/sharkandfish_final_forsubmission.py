@@ -101,7 +101,7 @@ def move():
                         shark[i,j]=0
                         starve[i,j]=0
                             
-def checkandgetrandomdirection_fish(i,j):
+def checkandgetrandomdirection_fish(i,j): #get a new position that fish can move in
     global fish,shark
     direc=[]
     if fish[(i-1)%L,j]==0 and shark[(i-1)%L,j]==0: #left, avoid sharks and fish
@@ -118,7 +118,7 @@ def checkandgetrandomdirection_fish(i,j):
         newposition=direc[rd.randint(0,len(direc)-1)]
         return newposition[0],newposition[1]
         
-def checkandgetrandomdirection_stof(i,j):
+def checkandgetrandomdirection_stof(i,j):#get a new position that has a fish
     global fish
     direc=[]
     if fish[(i-1)%L,j]>0: #left
